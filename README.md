@@ -1,4 +1,4 @@
-# Hotel System
+# Sistema de Hotel
 
 Sistema de gestión hotelera desarrollado con Flask y MySQL.
 
@@ -18,7 +18,7 @@ Sistema de gestión hotelera desarrollado con Flask y MySQL.
 - Bootstrap
 - GitHub
 
-## Tecnologías
+## Integrantes
 -Arteaga Moyota Xiomara Veronica
 -García Barreto Martha Belén
 -Loor Parraga Mellisa Anthonella
