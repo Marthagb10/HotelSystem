@@ -12,9 +12,35 @@ app.config["MYSQL_DB"] = "hotel_db"
 mysql = MySQL(app)
 
 
-@app.route("/")
+@app.route('/')
 def home():
-    return render_template("index.html")
+
+    if 'usuario' not in session:
+        return redirect('/login')
+
+    cur = mysql.connection.cursor()
+
+    cur.execute("SELECT COUNT(*) FROM clientes")
+    total_clientes = cur.fetchone()[0]
+
+    cur.execute("SELECT COUNT(*) FROM habitaciones")
+    total_habitaciones = cur.fetchone()[0]
+
+    cur.execute("SELECT COUNT(*) FROM reservas")
+    total_reservas = cur.fetchone()[0]
+
+    cur.execute("SELECT SUM(monto) FROM pagos")
+    resultado = cur.fetchone()[0]
+
+    total_pagos = resultado if resultado else 0
+
+    return render_template(
+        'index.html',
+        total_clientes=total_clientes,
+        total_habitaciones=total_habitaciones,
+        total_reservas=total_reservas,
+        total_pagos=total_pagos
+    )
 
 
 @app.route("/clientes")

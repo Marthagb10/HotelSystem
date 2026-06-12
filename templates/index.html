@@ -2,14 +2,50 @@
 
 {% block body %}
 
-<div class="text-center mt-5">
+<h2 class="mb-4">Dashboard</h2>
 
-    <h1>Sistema de Reservas de Hotel</h1>
+<div class="row">
 
-    <p class="lead">
-        Proyecto Medio Ciclo
-    </p>
-    
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h1>👥</h1>
+                <h5>Clientes</h5>
+                <h3>{{ total_clientes }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h1>🛏️</h1>
+                <h5>Habitaciones</h5>
+                <h3>{{ total_habitaciones }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h1>📅</h1>
+                <h5>Reservas</h5>
+                <h3>{{ total_reservas }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h1>💰</h1>
+                <h5>Pagos</h5>
+                <h3>${{ total_pagos }}</h3>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 {% endblock %}
