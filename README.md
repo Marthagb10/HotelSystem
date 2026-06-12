@@ -19,6 +19,6 @@ Sistema de gestión hotelera desarrollado con Flask y MySQL.
 - GitHub
 
 ## Integrantes
--Arteaga Moyota Xiomara Veronica
--García Barreto Martha Belén
--Loor Parraga Mellisa Anthonella
+- Arteaga Moyota Xiomara Veronica
+- García Barreto Martha Belén
+- Loor Parraga Mellisa Anthonella
