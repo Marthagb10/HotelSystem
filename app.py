@@ -53,53 +53,6 @@ def add_cliente():
 
         return redirect("/clientes")
 
-
-@app.route("/habitaciones")
-def habitaciones():
-
-    cur = mysql.connection.cursor()
-
-    cur.execute("SELECT * FROM habitaciones")
-
-    habitaciones = cur.fetchall()
-
-    return render_template("habitaciones.html", habitaciones=habitaciones)
-
-
-@app.route("/add_habitacion", methods=["POST"])
-def add_habitacion():
-
-    numero = request.form["numero"]
-    tipo = request.form["tipo"]
-    precio = request.form["precio"]
-    estado = request.form["estado"]
-
-    cur = mysql.connection.cursor()
-
-    cur.execute(
-        """
-        INSERT INTO habitaciones
-        (numero, tipo, precio, estado)
-        VALUES (%s,%s,%s,%s)
-    """,
-        (numero, tipo, precio, estado),
-    )
-
-    mysql.connection.commit()
-
-    return redirect("/habitaciones")
-
-
-@app.route("/reservas")
-def reservas():
-    return "<h1>Modulo Reservas</h1>"
-
-
-@app.route("/pagos")
-def pagos():
-    return "<h1>Modulo Pagos</h1>"
-
-
 @app.route("/delete_cliente/<id>")
 def delete_cliente(id):
 
@@ -150,6 +103,104 @@ def update_cliente(id):
 
     return redirect("/clientes")
 
+@app.route("/habitaciones")
+def habitaciones():
 
-if __name__ == "__main__":
+    cur = mysql.connection.cursor()
+
+    cur.execute("SELECT * FROM habitaciones")
+
+    habitaciones = cur.fetchall()
+
+    return render_template("habitaciones.html", habitaciones=habitaciones)
+
+
+@app.route("/add_habitacion", methods=["POST"])
+def add_habitacion():
+
+    numero = request.form["numero"]
+    tipo = request.form["tipo"]
+    precio = request.form["precio"]
+    estado = request.form["estado"]
+
+    cur = mysql.connection.cursor()
+
+    cur.execute(
+        """
+        INSERT INTO habitaciones
+        (numero, tipo, precio, estado)
+        VALUES (%s,%s,%s,%s)
+    """,
+        (numero, tipo, precio, estado),
+    )
+
+    mysql.connection.commit()
+
+    return redirect("/habitaciones")
+
+@app.route('/delete_habitacion/<id>')
+def delete_habitacion(id):
+
+    cur = mysql.connection.cursor()
+
+    cur.execute(
+        "DELETE FROM habitaciones WHERE id_habitacion=%s",
+        (id,)
+    )
+
+    mysql.connection.commit()
+
+    return redirect('/habitaciones')
+
+@app.route('/edit_habitacion/<id>')
+def edit_habitacion(id):
+
+    cur = mysql.connection.cursor()
+
+    cur.execute(
+        "SELECT * FROM habitaciones WHERE id_habitacion=%s",
+        (id,)
+    )
+
+    habitacion = cur.fetchone()
+
+    return render_template(
+        'edit_habitacion.html',
+        habitacion=habitacion
+    )
+
+@app.route('/update_habitacion/<id>', methods=['POST'])
+def update_habitacion(id):
+
+    numero = request.form['numero']
+    tipo = request.form['tipo']
+    precio = request.form['precio']
+    estado = request.form['estado']
+
+    cur = mysql.connection.cursor()
+
+    cur.execute("""
+        UPDATE habitaciones
+        SET numero=%s,
+            tipo=%s,
+            precio=%s,
+            estado=%s
+        WHERE id_habitacion=%s
+    """, (numero, tipo, precio, estado, id))
+
+    mysql.connection.commit()
+
+    return redirect('/habitaciones')
+
+@app.route("/reservas")
+def reservas():
+    return "<h1>Modulo Reservas</h1>"
+
+
+@app.route("/pagos")
+def pagos():
+    return "<h1>Modulo Pagos</h1>"
+
+
+if __name__ == '__main__':
     app.run(debug=True)
