@@ -16,35 +16,19 @@
                 <form action="/add_cliente" method="POST">
 
                     <div class="mb-3">
-                        <input type="text"
-                               name="nombre"
-                               class="form-control"
-                               placeholder="Nombre"
-                               required>
+                        <input type="text" name="nombre" class="form-control" placeholder="Nombre" required>
                     </div>
 
                     <div class="mb-3">
-                        <input type="text"
-                               name="cedula"
-                               class="form-control"
-                               placeholder="Cedula"
-                               required>
+                        <input type="text" name="cedula" class="form-control" placeholder="Cedula" required>
                     </div>
 
                     <div class="mb-3">
-                        <input type="text"
-                               name="telefono"
-                               class="form-control"
-                               placeholder="Telefono"
-                               required>
+                        <input type="text" name="telefono" class="form-control" placeholder="Telefono" required>
                     </div>
 
                     <div class="mb-3">
-                        <input type="text"
-                               name="direccion"
-                               class="form-control"
-                               placeholder="Direccion"
-                               required>
+                        <input type="text" name="direccion" class="form-control" placeholder="Direccion" required>
                     </div>
 
                     <button class="btn btn-primary">
@@ -69,6 +53,7 @@
                     <th>Cedula</th>
                     <th>Telefono</th>
                     <th>Direccion</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
 
@@ -82,6 +67,12 @@
                     <td>{{ cliente.2 }}</td>
                     <td>{{ cliente.3 }}</td>
                     <td>{{ cliente.4 }}</td>
+
+                    <td>
+                        <a href="/delete_cliente/{{ cliente.0 }}" class="btn btn-danger btn-sm">
+                            Eliminar
+                        </a>
+                    </td>
                 </tr>
 
                 {% endfor %}

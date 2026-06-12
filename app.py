@@ -62,5 +62,19 @@ def reservas():
 def pagos():
     return "<h1>Modulo Pagos</h1>"
 
+@app.route('/delete_cliente/<id>')
+def delete_cliente(id):
+
+    cur = mysql.connection.cursor()
+
+    cur.execute(
+        "DELETE FROM clientes WHERE id_cliente=%s",
+        (id,)
+    )
+
+    mysql.connection.commit()
+
+    return redirect('/clientes')
+
 if __name__ == '__main__':
     app.run(debug=True)
