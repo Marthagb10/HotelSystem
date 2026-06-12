@@ -52,7 +52,37 @@ def add_cliente():
 
 @app.route('/habitaciones')
 def habitaciones():
-    return "<h1>Modulo Habitaciones</h1>"
+
+    cur = mysql.connection.cursor()
+
+    cur.execute("SELECT * FROM habitaciones")
+
+    habitaciones = cur.fetchall()
+
+    return render_template(
+        'habitaciones.html',
+        habitaciones=habitaciones
+    )
+
+@app.route('/add_habitacion', methods=['POST'])
+def add_habitacion():
+
+    numero = request.form['numero']
+    tipo = request.form['tipo']
+    precio = request.form['precio']
+    estado = request.form['estado']
+
+    cur = mysql.connection.cursor()
+
+    cur.execute("""
+        INSERT INTO habitaciones
+        (numero, tipo, precio, estado)
+        VALUES (%s,%s,%s,%s)
+    """, (numero, tipo, precio, estado))
+
+    mysql.connection.commit()
+
+    return redirect('/habitaciones')
 
 @app.route('/reservas')
 def reservas():
@@ -115,6 +145,6 @@ def update_cliente(id):
 
     return redirect('/clientes')
 
-    
+
 if __name__ == '__main__':
     app.run(debug=True)
