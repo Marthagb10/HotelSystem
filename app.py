@@ -76,5 +76,45 @@ def delete_cliente(id):
 
     return redirect('/clientes')
 
+@app.route('/edit_cliente/<id>')
+def edit_cliente(id):
+
+    cur = mysql.connection.cursor()
+
+    cur.execute(
+        "SELECT * FROM clientes WHERE id_cliente=%s",
+        (id,)
+    )
+
+    cliente = cur.fetchone()
+
+    return render_template(
+        'edit_cliente.html',
+        cliente=cliente
+    )
+@app.route('/update_cliente/<id>', methods=['POST'])
+def update_cliente(id):
+
+    nombre = request.form['nombre']
+    cedula = request.form['cedula']
+    telefono = request.form['telefono']
+    direccion = request.form['direccion']
+
+    cur = mysql.connection.cursor()
+
+    cur.execute("""
+        UPDATE clientes
+        SET nombre=%s,
+            cedula=%s,
+            telefono=%s,
+            direccion=%s
+        WHERE id_cliente=%s
+    """, (nombre, cedula, telefono, direccion, id))
+
+    mysql.connection.commit()
+
+    return redirect('/clientes')
+
+    
 if __name__ == '__main__':
     app.run(debug=True)
