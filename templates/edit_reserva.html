@@ -1,0 +1,105 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<div class="container mt-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-6">
+
+            <div class="card">
+
+                <div class="card-header">
+                    <h4>Editar Reserva</h4>
+                </div>
+
+                <div class="card-body">
+
+                    <form action="/update_reserva/{{ reserva.0 }}" method="POST">
+
+                        <div class="mb-3">
+                            <label class="form-label">Fecha Ingreso</label>
+                            <input type="date"
+                                   name="fecha_ingreso"
+                                   value="{{ reserva.1 }}"
+                                   class="form-control"
+                                   required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Fecha Salida</label>
+                            <input type="date"
+                                   name="fecha_salida"
+                                   value="{{ reserva.2 }}"
+                                   class="form-control"
+                                   required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Cliente</label>
+
+                            <select name="id_cliente"
+                                    class="form-control"
+                                    required>
+
+                                {% for cliente in clientes %}
+
+                                <option value="{{ cliente.0 }}"
+                                {% if cliente.0 == reserva.3 %}
+                                selected
+                                {% endif %}>
+                                    {{ cliente.1 }}
+                                </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Habitación</label>
+
+                            <select name="id_habitacion"
+                                    class="form-control"
+                                    required>
+
+                                {% for habitacion in habitaciones %}
+
+                                <option value="{{ habitacion.0 }}"
+                                {% if habitacion.0 == reserva.4 %}
+                                selected
+                                {% endif %}>
+                                    Habitación {{ habitacion.1 }}
+                                </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                        </div>
+
+                        <button type="submit"
+                                class="btn btn-success">
+                            Actualizar Reserva
+                        </button>
+
+                        <a href="/reservas"
+                           class="btn btn-secondary">
+                            Cancelar
+                        </a>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

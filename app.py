@@ -251,6 +251,74 @@ def add_reserva():
 
     return redirect('/reservas')
 
+@app.route('/delete_reserva/<id>')
+def delete_reserva(id):
+
+    cur = mysql.connection.cursor()
+
+    cur.execute(
+        "DELETE FROM reservas WHERE id_reserva=%s",
+        (id,)
+    )
+
+    mysql.connection.commit()
+
+    return redirect('/reservas')
+
+@app.route('/edit_reserva/<id>')
+def edit_reserva(id):
+
+    cur = mysql.connection.cursor()
+
+    cur.execute(
+        "SELECT * FROM reservas WHERE id_reserva=%s",
+        (id,)
+    )
+
+    reserva = cur.fetchone()
+
+    cur.execute("SELECT * FROM clientes")
+    clientes = cur.fetchall()
+
+    cur.execute("SELECT * FROM habitaciones")
+    habitaciones = cur.fetchall()
+
+    return render_template(
+        'edit_reserva.html',
+        reserva=reserva,
+        clientes=clientes,
+        habitaciones=habitaciones
+    )
+
+@app.route('/update_reserva/<id>', methods=['POST'])
+def update_reserva(id):
+
+    fecha_ingreso = request.form['fecha_ingreso']
+    fecha_salida = request.form['fecha_salida']
+    id_cliente = request.form['id_cliente']
+    id_habitacion = request.form['id_habitacion']
+
+    cur = mysql.connection.cursor()
+
+    cur.execute("""
+        UPDATE reservas
+        SET fecha_ingreso=%s,
+            fecha_salida=%s,
+            id_cliente=%s,
+            id_habitacion=%s
+        WHERE id_reserva=%s
+    """, (
+        fecha_ingreso,
+        fecha_salida,
+        id_cliente,
+        id_habitacion,
+        id
+    ))
+
+    mysql.connection.commit()
+
+    return redirect('/reservas')
+
 @app.route("/pagos")
 def pagos():
     return "<h1>Modulo Pagos</h1>"

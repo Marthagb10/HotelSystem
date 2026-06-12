@@ -16,18 +16,13 @@
                 <form action="/add_reserva" method="POST">
 
                     <label>Fecha Ingreso</label>
-                    <input type="date"
-                           name="fecha_ingreso"
-                           class="form-control mb-3">
+                    <input type="date" name="fecha_ingreso" class="form-control mb-3">
 
                     <label>Fecha Salida</label>
-                    <input type="date"
-                           name="fecha_salida"
-                           class="form-control mb-3">
+                    <input type="date" name="fecha_salida" class="form-control mb-3">
 
                     <label>Cliente</label>
-                    <select name="id_cliente"
-                            class="form-control mb-3">
+                    <select name="id_cliente" class="form-control mb-3">
 
                         {% for cliente in clientes %}
 
@@ -40,8 +35,7 @@
                     </select>
 
                     <label>Habitación</label>
-                    <select name="id_habitacion"
-                            class="form-control mb-3">
+                    <select name="id_habitacion" class="form-control mb-3">
 
                         {% for habitacion in habitaciones %}
 
@@ -77,6 +71,7 @@
                     <th>Salida</th>
                     <th>Cliente</th>
                     <th>Habitación</th>
+                    <th>Acciones</th>
                 </tr>
 
             </thead>
@@ -86,13 +81,21 @@
                 {% for reserva in reservas %}
 
                 <tr>
-
                     <td>{{ reserva.0 }}</td>
                     <td>{{ reserva.1 }}</td>
                     <td>{{ reserva.2 }}</td>
                     <td>{{ reserva.3 }}</td>
                     <td>{{ reserva.4 }}</td>
 
+                    <td>
+                        <a href="/edit_reserva/{{ reserva.0 }}" class="btn btn-warning btn-sm">
+                            Editar
+                        </a>
+
+                        <a href="/delete_reserva/{{ reserva.0 }}" class="btn btn-danger btn-sm">
+                            Eliminar
+                        </a>
+                    </td>
                 </tr>
 
                 {% endfor %}
