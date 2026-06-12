@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session
 from flask_mysqldb import MySQL
 
 app = Flask(__name__)
+app.secret_key = "hotel_secret_key_2026"
 
 app.config["MYSQL_HOST"] = "localhost"
 app.config["MYSQL_USER"] = "root"
@@ -18,6 +19,9 @@ def home():
 
 @app.route("/clientes")
 def clientes():
+
+    if 'usuario' not in session:
+        return redirect('/login')
 
     cur = mysql.connection.cursor()
 
@@ -105,6 +109,9 @@ def update_cliente(id):
 
 @app.route("/habitaciones")
 def habitaciones():
+    
+    if 'usuario' not in session:
+        return redirect('/login')
 
     cur = mysql.connection.cursor()
 
@@ -194,6 +201,9 @@ def update_habitacion(id):
 
 @app.route('/reservas')
 def reservas():
+
+    if 'usuario' not in session:
+        return redirect('/login')
 
     cur = mysql.connection.cursor()
 
@@ -322,6 +332,9 @@ def update_reserva(id):
 @app.route('/pagos')
 def pagos():
 
+    if 'usuario' not in session:
+        return redirect('/login')
+
     cur = mysql.connection.cursor()
 
     cur.execute("""
@@ -436,6 +449,74 @@ def update_pago(id):
 
     return redirect('/pagos')
 
+@app.route('/register')
+def register():
+
+    return render_template('register.html')
+
+
+@app.route('/add_user', methods=['POST'])
+def add_user():
+
+    nombre = request.form['nombre']
+    correo = request.form['correo']
+    password = request.form['password']
+
+    cur = mysql.connection.cursor()
+
+    cur.execute("""
+        INSERT INTO usuarios
+        (nombre, correo, password)
+        VALUES (%s,%s,%s)
+    """, (
+        nombre,
+        correo,
+        password
+    ))
+
+    mysql.connection.commit()
+
+    return redirect('/login')
+
+@app.route('/login')
+def login():
+
+    return render_template('login.html')
+
+
+@app.route('/login_user', methods=['POST'])
+def login_user():
+
+    correo = request.form['correo']
+    password = request.form['password']
+
+    cur = mysql.connection.cursor()
+
+    cur.execute("""
+        SELECT * FROM usuarios
+        WHERE correo=%s
+        AND password=%s
+    """, (
+        correo,
+        password
+    ))
+
+    usuario = cur.fetchone()
+
+    if usuario:
+
+        session['usuario'] = usuario[1]
+
+        return redirect('/')
+
+    return redirect('/login')
+
+@app.route('/logout')
+def logout():
+
+    session.clear()
+
+    return redirect('/login')
 
 if __name__ == '__main__':
     app.run(debug=True)

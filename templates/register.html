@@ -1,0 +1,53 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<div class="col-md-4 mx-auto">
+
+    <div class="card">
+
+        <div class="card-header">
+            Crear Cuenta
+        </div>
+
+        <div class="card-body">
+
+            <form action="/add_user" method="POST">
+
+                <input type="text"
+                       name="nombre"
+                       placeholder="Nombre"
+                       class="form-control mb-3"
+                       required>
+
+                <input type="email"
+                       name="correo"
+                       placeholder="Correo"
+                       class="form-control mb-3"
+                       required>
+
+                <input type="password"
+                       name="password"
+                       placeholder="Contraseña"
+                       class="form-control mb-3"
+                       required>
+
+                <button class="btn btn-success">
+                    Registrarse
+                </button>
+
+            </form>
+
+            <hr>
+
+            <a href="/login">
+                Ya tengo cuenta
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
