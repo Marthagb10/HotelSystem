@@ -192,10 +192,64 @@ def update_habitacion(id):
 
     return redirect('/habitaciones')
 
-@app.route("/reservas")
+@app.route('/reservas')
 def reservas():
-    return "<h1>Modulo Reservas</h1>"
 
+    cur = mysql.connection.cursor()
+
+    cur.execute("""
+        SELECT
+            r.id_reserva,
+            r.fecha_ingreso,
+            r.fecha_salida,
+            c.nombre,
+            h.numero
+        FROM reservas r
+        INNER JOIN clientes c
+            ON r.id_cliente = c.id_cliente
+        INNER JOIN habitaciones h
+            ON r.id_habitacion = h.id_habitacion
+    """)
+
+    reservas = cur.fetchall()
+
+    cur.execute("SELECT * FROM clientes")
+    clientes = cur.fetchall()
+
+    cur.execute("SELECT * FROM habitaciones")
+    habitaciones = cur.fetchall()
+
+    return render_template(
+        'reservas.html',
+        reservas=reservas,
+        clientes=clientes,
+        habitaciones=habitaciones
+    )
+
+@app.route('/add_reserva', methods=['POST'])
+def add_reserva():
+
+    fecha_ingreso = request.form['fecha_ingreso']
+    fecha_salida = request.form['fecha_salida']
+    id_cliente = request.form['id_cliente']
+    id_habitacion = request.form['id_habitacion']
+
+    cur = mysql.connection.cursor()
+
+    cur.execute("""
+        INSERT INTO reservas
+        (fecha_ingreso, fecha_salida, id_cliente, id_habitacion)
+        VALUES (%s,%s,%s,%s)
+    """, (
+        fecha_ingreso,
+        fecha_salida,
+        id_cliente,
+        id_habitacion
+    ))
+
+    mysql.connection.commit()
+
+    return redirect('/reservas')
 
 @app.route("/pagos")
 def pagos():

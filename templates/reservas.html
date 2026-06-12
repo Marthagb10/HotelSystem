@@ -1,0 +1,108 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<div class="row">
+
+    <div class="col-md-4">
+
+        <div class="card">
+            <div class="card-header">
+                Registrar Reserva
+            </div>
+
+            <div class="card-body">
+
+                <form action="/add_reserva" method="POST">
+
+                    <label>Fecha Ingreso</label>
+                    <input type="date"
+                           name="fecha_ingreso"
+                           class="form-control mb-3">
+
+                    <label>Fecha Salida</label>
+                    <input type="date"
+                           name="fecha_salida"
+                           class="form-control mb-3">
+
+                    <label>Cliente</label>
+                    <select name="id_cliente"
+                            class="form-control mb-3">
+
+                        {% for cliente in clientes %}
+
+                        <option value="{{ cliente.0 }}">
+                            {{ cliente.1 }}
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                    <label>Habitación</label>
+                    <select name="id_habitacion"
+                            class="form-control mb-3">
+
+                        {% for habitacion in habitaciones %}
+
+                        <option value="{{ habitacion.0 }}">
+                            Habitación {{ habitacion.1 }}
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                    <button class="btn btn-primary">
+                        Guardar
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-8">
+
+        <table class="table table-bordered">
+
+            <thead>
+
+                <tr>
+                    <th>ID</th>
+                    <th>Ingreso</th>
+                    <th>Salida</th>
+                    <th>Cliente</th>
+                    <th>Habitación</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for reserva in reservas %}
+
+                <tr>
+
+                    <td>{{ reserva.0 }}</td>
+                    <td>{{ reserva.1 }}</td>
+                    <td>{{ reserva.2 }}</td>
+                    <td>{{ reserva.3 }}</td>
+                    <td>{{ reserva.4 }}</td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}
