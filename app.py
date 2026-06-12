@@ -319,9 +319,122 @@ def update_reserva(id):
 
     return redirect('/reservas')
 
-@app.route("/pagos")
+@app.route('/pagos')
 def pagos():
-    return "<h1>Modulo Pagos</h1>"
+
+    cur = mysql.connection.cursor()
+
+    cur.execute("""
+        SELECT
+            p.id_pago,
+            p.monto,
+            p.fecha_pago,
+            p.metodo_pago,
+            r.id_reserva
+        FROM pagos p
+        INNER JOIN reservas r
+            ON p.id_reserva = r.id_reserva
+    """)
+
+    pagos = cur.fetchall()
+
+    cur.execute("SELECT * FROM reservas")
+    reservas = cur.fetchall()
+
+    return render_template(
+        'pagos.html',
+        pagos=pagos,
+        reservas=reservas
+    )
+
+@app.route('/add_pago', methods=['POST'])
+def add_pago():
+
+    monto = request.form['monto']
+    fecha_pago = request.form['fecha_pago']
+    metodo_pago = request.form['metodo_pago']
+    id_reserva = request.form['id_reserva']
+
+    cur = mysql.connection.cursor()
+
+    cur.execute("""
+        INSERT INTO pagos
+        (monto, fecha_pago, metodo_pago, id_reserva)
+        VALUES (%s,%s,%s,%s)
+    """, (
+        monto,
+        fecha_pago,
+        metodo_pago,
+        id_reserva
+    ))
+
+    mysql.connection.commit()
+
+    return redirect('/pagos')
+
+@app.route('/delete_pago/<id>')
+def delete_pago(id):
+
+    cur = mysql.connection.cursor()
+
+    cur.execute(
+        "DELETE FROM pagos WHERE id_pago=%s",
+        (id,)
+    )
+
+    mysql.connection.commit()
+
+    return redirect('/pagos')
+
+@app.route('/edit_pago/<id>')
+def edit_pago(id):
+
+    cur = mysql.connection.cursor()
+
+    cur.execute(
+        "SELECT * FROM pagos WHERE id_pago=%s",
+        (id,)
+    )
+
+    pago = cur.fetchone()
+
+    cur.execute("SELECT * FROM reservas")
+    reservas = cur.fetchall()
+
+    return render_template(
+        'edit_pago.html',
+        pago=pago,
+        reservas=reservas
+    )
+
+@app.route('/update_pago/<id>', methods=['POST'])
+def update_pago(id):
+
+    monto = request.form['monto']
+    fecha_pago = request.form['fecha_pago']
+    metodo_pago = request.form['metodo_pago']
+    id_reserva = request.form['id_reserva']
+
+    cur = mysql.connection.cursor()
+
+    cur.execute("""
+        UPDATE pagos
+        SET monto=%s,
+            fecha_pago=%s,
+            metodo_pago=%s,
+            id_reserva=%s
+        WHERE id_pago=%s
+    """, (
+        monto,
+        fecha_pago,
+        metodo_pago,
+        id_reserva,
+        id
+    ))
+
+    mysql.connection.commit()
+
+    return redirect('/pagos')
 
 
 if __name__ == '__main__':
